@@ -1,0 +1,571 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Teste Verdadeiro ou Falso: Teorias do Desenvolvimento Econômico</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700;9..144,800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper: #F5F1E8;
+  --card: #FFFDF8;
+  --ink: #1E2230;
+  --muted: #4F5361;
+  --rule: #D9D3C4;
+  --ok: #17612F;
+  --ok-bg: #E2F3E7;
+  --ok-line: #2E9A55;
+  --bad: #9E2323;
+  --bad-bg: #FBE3E0;
+  --bad-line: #D14B45;
+  --display: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --body: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+* { box-sizing: border-box; }
+html { scroll-padding-top: 96px; }
+body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--body); font-size: 17px; line-height: 1.55; }
+.wrap { max-width: 860px; margin: 0 auto; padding: 0 20px; }
+
+/* cabeçalho */
+.hero { padding: 40px 0 8px; }
+.eyebrow { margin: 0 0 8px; font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+h1 { margin: 0 0 10px; font-family: var(--display); font-size: clamp(30px, 6vw, 48px); line-height: 1.1; font-weight: 800; }
+.lead { margin: 0 0 22px; color: var(--muted); font-size: 18px; }
+
+.controls { display: flex; flex-wrap: wrap; gap: 10px 8px; align-items: center; margin-bottom: 14px; }
+.controls .label { font-size: 13px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-right: 4px; }
+.chip { font: inherit; font-size: 15px; font-weight: 600; min-height: 40px; padding: 6px 14px; border-radius: 999px; border: 2px solid var(--rule); background: var(--card); color: var(--ink); cursor: pointer; }
+.chip:hover { border-color: var(--c, var(--ink)); }
+.chip[aria-pressed="true"] { background: var(--c, var(--ink)); border-color: var(--c, var(--ink)); color: #fff; }
+.chip[data-a="rr"] { --c: #0E4786; }
+.chip[data-a="nu"] { --c: #763000; }
+.chip[data-a="le"] { --c: #005A30; }
+.chip[data-a="hi"] { --c: #5B3177; }
+.chip[data-a="my"] { --c: #7B2436; }
+.btn { font: inherit; font-size: 15px; font-weight: 600; min-height: 44px; padding: 8px 16px; border-radius: 12px; border: 2px solid var(--ink); background: var(--card); color: var(--ink); cursor: pointer; }
+.btn:hover { background: var(--ink); color: #fff; }
+.btn.primary { background: var(--ink); color: #fff; }
+.btn.primary:hover { background: #3a4058; border-color: #3a4058; }
+:focus-visible { outline: 3px solid #2B6CD6; outline-offset: 2px; }
+
+/* barra de progresso */
+.stats { position: sticky; top: 0; z-index: 5; background: var(--paper); border-bottom: 1px solid var(--rule); padding: 10px 0 12px; margin-top: 10px; }
+.stats-row { display: flex; flex-wrap: wrap; gap: 4px 18px; align-items: baseline; font-size: 15px; font-weight: 600; }
+.stats-row .ok { color: var(--ok); }
+.stats-row .bad { color: var(--bad); }
+.bar { margin-top: 8px; height: 10px; border-radius: 999px; background: #E4DECF; overflow: hidden; display: flex; }
+.bar i { display: block; height: 100%; transition: width .3s ease; }
+.bar .b-ok { background: var(--ok-line); }
+.bar .b-bad { background: var(--bad-line); }
+
+/* questões */
+.group { margin: 34px 0 6px; font-family: var(--display); font-size: 26px; font-weight: 800; display: flex; align-items: center; gap: 12px; }
+.group span { font-family: var(--body); font-size: 13px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+.q { --c: var(--ink); --t: #E9E4D6; margin: 14px 0; padding: 22px 22px 20px; background: var(--card); border: 2px solid var(--rule); border-radius: 18px; transition: background .2s, border-color .2s; }
+.q[data-a="rr"] { --c: #0E4786; --t: #DCEDFF; }
+.q[data-a="nu"] { --c: #763000; --t: #FFE6D6; }
+.q[data-a="le"] { --c: #005A30; --t: #D8F3E3; }
+.q[data-a="hi"] { --c: #5B3177; --t: #F2E5FD; }
+.q[data-a="my"] { --c: #7B2436; --t: #FFE2E5; }
+.q.ok { background: var(--ok-bg); border-color: var(--ok-line); }
+.q.bad { background: var(--bad-bg); border-color: var(--bad-line); }
+.meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 12px; }
+.num { display: inline-flex; align-items: center; justify-content: center; min-width: 30px; height: 30px; padding: 0 8px; border-radius: 15px; background: var(--c); color: #fff; font-size: 14px; font-weight: 700; }
+.tag { font-size: 13px; font-weight: 700; letter-spacing: .06em; padding: 4px 10px; border-radius: 999px; background: var(--t); color: var(--c); }
+.src { font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: 3px 8px; border-radius: 6px; border: 1.5px dashed var(--muted); color: var(--muted); }
+.stmt { margin: 0 0 18px; font-size: 19px; line-height: 1.5; font-weight: 500; }
+.answers { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.ans { font: inherit; font-size: 17px; font-weight: 700; min-height: 54px; padding: 10px 14px; border-radius: 14px; border: 2px solid var(--ink); background: var(--card); color: var(--ink); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+.ans:hover:not(:disabled) { background: var(--ink); color: #fff; }
+.ans:disabled { cursor: default; }
+.q.answered .ans { border-color: var(--rule); background: transparent; color: var(--muted); opacity: .85; }
+.q.answered .ans.pick-ok { background: var(--ok); border-color: var(--ok); color: #fff; opacity: 1; }
+.q.answered .ans.pick-bad { background: var(--bad); border-color: var(--bad); color: #fff; opacity: 1; }
+.q.answered .ans.right { border: 3px solid var(--ok); color: var(--ok); background: #fff; opacity: 1; }
+.exp { margin-top: 16px; padding: 14px 16px; border-radius: 12px; background: #fff; border: 2px solid var(--rule); font-size: 16.5px; }
+.q.ok .exp { border-color: var(--ok-line); }
+.q.bad .exp { border-color: var(--bad-line); }
+.verdict { display: inline-flex; align-items: center; gap: 6px; font-weight: 800; margin-right: 6px; }
+.q.ok .verdict { color: var(--ok); }
+.q.bad .verdict { color: var(--bad); }
+.exp .next { display: block; margin-top: 12px; font: inherit; font-size: 14.5px; font-weight: 600; min-height: 40px; padding: 6px 14px; border-radius: 10px; border: 2px solid var(--ink); background: var(--card); color: var(--ink); cursor: pointer; }
+.exp .next:hover { background: var(--ink); color: #fff; }
+
+/* resultado */
+.result { margin: 36px 0 60px; padding: 28px 24px; border-radius: 20px; background: var(--ink); color: #fff; }
+.result h2 { margin: 0 0 6px; font-family: var(--display); font-size: 32px; line-height: 1.15; font-weight: 800; }
+.score { font-family: var(--display); font-size: 64px; line-height: 1; font-weight: 800; margin: 8px 0 4px; }
+.score small { font-size: 26px; font-weight: 700; opacity: .85; }
+.msg { margin: 8px 0 20px; font-size: 18px; }
+.byauthor { display: grid; gap: 10px; margin: 0 0 24px; padding: 0; list-style: none; }
+.byauthor li { display: grid; grid-template-columns: 150px 1fr 60px; gap: 12px; align-items: center; font-size: 15px; font-weight: 600; }
+.byauthor .track { height: 12px; border-radius: 999px; background: rgba(255,255,255,.22); overflow: hidden; }
+.byauthor .fill { display: block; height: 100%; background: #7BD99A; }
+.byauthor .val { text-align: right; }
+.result .actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.result .btn { border-color: #fff; background: transparent; color: #fff; }
+.result .btn:hover { background: #fff; color: var(--ink); }
+.result .btn.primary { background: #fff; color: var(--ink); }
+.result .btn.primary:hover { background: #E9E4D6; border-color: #E9E4D6; }
+.foot { padding: 0 0 50px; text-align: center; color: var(--muted); font-size: 14px; }
+
+@media (max-width: 560px) {
+  body { font-size: 16px; }
+  .q { padding: 18px 16px 16px; }
+  .stmt { font-size: 18px; }
+  .byauthor li { grid-template-columns: 1fr 50px; }
+  .byauthor .track { grid-column: 1 / -1; grid-row: 2; }
+  .score { font-size: 54px; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="wrap">
+    <p class="eyebrow">Desenvolvimento e Políticas Econômicas · Caps. 1, 3, 4, 5 e 6</p>
+    <h1>Verdadeiro ou falso: as teorias dos cinco autores</h1>
+    <p class="lead">40 afirmações sobre Rosenstein-Rodan, Nurkse, Lewis, Hirschman e Myrdal. Clique em <strong>Verdadeiro</strong> ou <strong>Falso</strong>: acertou, o cartão fica verde; errou, fica vermelho. Nos dois casos aparece uma explicação.</p>
+    <div class="controls" role="group" aria-label="Filtrar por autor">
+      <span class="label">Autor</span>
+      <button type="button" class="chip" data-filter="all" aria-pressed="true">Todos</button>
+      <button type="button" class="chip" data-a="rr" data-filter="rr" aria-pressed="false">Rosenstein-Rodan</button>
+      <button type="button" class="chip" data-a="nu" data-filter="nu" aria-pressed="false">Nurkse</button>
+      <button type="button" class="chip" data-a="le" data-filter="le" aria-pressed="false">Lewis</button>
+      <button type="button" class="chip" data-a="hi" data-filter="hi" aria-pressed="false">Hirschman</button>
+      <button type="button" class="chip" data-a="my" data-filter="my" aria-pressed="false">Myrdal</button>
+    </div>
+    <div class="controls">
+      <button type="button" class="btn" id="btn-shuffle">Embaralhar ordem</button>
+      <button type="button" class="btn" id="btn-reset">Recomeçar do zero</button>
+    </div>
+  </div>
+</header>
+
+<div class="stats" aria-label="Seu progresso">
+  <div class="wrap">
+    <div class="stats-row" aria-live="polite">
+      <span id="st-done">0 de 40 respondidas</span>
+      <span class="ok" id="st-ok">0 certas</span>
+      <span class="bad" id="st-bad">0 erradas</span>
+    </div>
+    <div class="bar" role="progressbar" aria-label="Questões respondidas" aria-valuemin="0" aria-valuemax="40" aria-valuenow="0" id="bar">
+      <i class="b-ok" id="bar-ok" style="width:0%"></i><i class="b-bad" id="bar-bad" style="width:0%"></i>
+    </div>
+  </div>
+</div>
+
+<main class="wrap">
+  <div id="list"></div>
+  <section class="result" id="result" hidden aria-live="polite"></section>
+  <p class="foot">Baseado no guia de estudo dos capítulos 1, 3, 4, 5 e 6. Itens marcados “livro” vêm do texto do livro, como apoio.</p>
+</main>
+
+<script>
+(function () {
+  var AUTHORS = {
+    rr: { name: 'Rosenstein-Rodan', cap: 1 },
+    nu: { name: 'Nurkse', cap: 3 },
+    le: { name: 'Lewis', cap: 4 },
+    hi: { name: 'Hirschman', cap: 5 },
+    my: { name: 'Myrdal', cap: 6 }
+  };
+
+  var Q = [
+    // ---------- Rosenstein-Rodan ----------
+    { id: 'rr1', a: 'rr', v: true,
+      s: 'Para Rosenstein-Rodan, a industrialização dos países atrasados não surge espontaneamente: é preciso um grande impulso (Big Push) coordenado.',
+      e: 'A tese central é que o mercado sozinho não supera o atraso. É preciso industrialização em larga escala, com investimentos coordenados.' },
+    { id: 'rr2', a: 'rr', v: false,
+      s: 'Rosenstein-Rodan sustenta que o livre mercado tende a espalhar a indústria dos países ricos para os pobres, reduzindo o hiato entre eles.',
+      e: 'Para ele, a industrialização tende a se concentrar onde já há renda, infraestrutura e demanda. Sem ação deliberada, o hiato entre nações ricas e pobres tende a crescer.' },
+    { id: 'rr4', a: 'rr', v: false,
+      s: 'O Big Push consiste em investir de forma gradual e isolada em um único setor líder.',
+      e: 'O Big Push é um investimento em bloco: um volume mínimo e coordenado de investimentos em vários setores ao mesmo tempo, para que eles se sustentem mutuamente.' },
+    { id: 'rr3', a: 'rr', v: true,
+      s: 'Economias externas são ganhos indiretos que o investimento em um setor gera para outros, como mais demanda, infraestrutura e mão de obra qualificada.',
+      e: 'É por causa delas que investir em bloco compensa: cada setor ajuda a sustentar os demais.' },
+    { id: 'rr5', a: 'rr', v: true,
+      s: 'Na teoria do Big Push, o Estado tem papel central de coordenação e planejamento, criando o ambiente institucional e a infraestrutura adequados.',
+      e: 'O Estado coordena e planeja os investimentos e cria o ambiente institucional que a industrialização exige.' },
+    { id: 'rr6', a: 'rr', v: false,
+      s: 'Se a questão fala em grande impulso, investimento coordenado, industrialização em larga escala e economias externas, o autor lembrado deve ser Nurkse.',
+      e: 'Esses termos remetem a Rosenstein-Rodan. Nurkse é o autor do círculo vicioso da pobreza.' },
+    { id: 'rr8', a: 'rr', v: false, src: 'livro',
+      s: 'Segundo o livro, Rosenstein-Rodan apresenta o “modelo russo” (industrializar-se sem capital externo) como a via mais rápida de industrialização.',
+      e: 'O livro descreve o modelo russo como uma das duas vias, com desvantagens: crescimento lento, perda das vantagens da divisão internacional do trabalho e capacidade ociosa. A via mais rápida é a inserção na economia mundial com grande aporte de capital externo.' },
+    { id: 'rr7', a: 'rr', v: true,
+      s: 'Sem ação deliberada, o hiato entre países ricos e pobres tende a crescer, segundo Rosenstein-Rodan.',
+      e: 'A industrialização se concentra onde já há renda, então os países pobres não alcançam os ricos espontaneamente.' },
+
+    // ---------- Nurkse ----------
+    { id: 'nu1', a: 'nu', v: false,
+      s: 'O círculo vicioso de Nurkse começa com alta poupança que não encontra projetos de investimento.',
+      e: 'O círculo é: baixa renda → baixa poupança → baixo investimento → baixa produtividade → baixa renda.' },
+    { id: 'nu2', a: 'nu', v: true,
+      s: 'Para Nurkse, a pobreza se reproduz porque o país é pobre porque é pobre: a baixa renda mantém baixa poupança, baixo investimento e baixa produtividade.',
+      e: 'A pobreza não é só falta de dinheiro: é um mecanismo que se reproduz.' },
+    { id: 'nu3', a: 'nu', v: true,
+      s: 'Do lado da demanda de capital, a baixa produtividade e o mercado pequeno reduzem o estímulo a investir.',
+      e: 'Mercado pequeno → pouco estímulo a investir → pouco investimento → baixa produtividade novamente.' },
+    { id: 'nu4', a: 'nu', v: false,
+      s: 'Desemprego disfarçado significa trabalhadores sem nenhuma ocupação e sem renda.',
+      e: 'É mão de obra empregada, mas com produtividade quase nula, típica de economias densamente povoadas. Esse excedente é a “poupança oculta”: poderia ser deslocado para projetos de formação de capital.' },
+    { id: 'nu5', a: 'nu', v: false,
+      s: 'Nurkse rejeita o fortalecimento do mercado interno e defende que só as exportações rompem o círculo da pobreza.',
+      e: 'Ele valoriza o mercado interno, o crescimento equilibrado e a formação de capital.' },
+    { id: 'nu6', a: 'nu', v: true,
+      s: 'O efeito demonstração dificulta a poupança: populações pobres imitam o consumo das ricas e passam a consumir mais.',
+      e: 'Cresce a propensão a consumir, o que reduz a poupança necessária para formar capital.' },
+    { id: 'nu7', a: 'nu', v: false,
+      s: 'A coalizão nacional para o desenvolvimento, em Nurkse, dispensa a sociedade e cabe apenas ao Estado.',
+      e: 'Ela exige esforço interno, consciência coletiva e ação coordenada entre Estado e sociedade.' },
+    { id: 'nu8', a: 'nu', v: true,
+      s: 'Nurkse defende o crescimento equilibrado: investir de forma articulada em diferentes setores para ampliar o mercado como um todo.',
+      e: 'Investimentos articulados ampliam o mercado e ajudam a romper o círculo da pobreza.' },
+
+    // ---------- Lewis ----------
+    { id: 'le1', a: 'le', v: false,
+      s: 'Dualidade estrutural, em Lewis, significa a coexistência de dois países no mundo, um rico e um pobre.',
+      e: 'Significa que, no mesmo país, coexistem um setor moderno, mais produtivo, e um setor atrasado, de baixa produtividade: “ilhas de modernidade num mar de atraso”.' },
+    { id: 'le2', a: 'le', v: true,
+      s: 'Oferta ilimitada de mão de obra quer dizer que há tanto trabalhador excedente que sua produtividade marginal tende a zero ou quase zero.',
+      e: 'Esse excedente fica concentrado em atividades de baixíssima produtividade, no setor atrasado.' },
+    { id: 'le3', a: 'le', v: true,
+      s: 'Para Lewis, o desenvolvimento depende da rápida acumulação de capital no setor moderno, capaz de absorver o excedente de trabalho.',
+      e: 'Expandir o setor moderno é o caminho para absorver produtivamente a mão de obra excedente.' },
+    { id: 'le4', a: 'le', v: false,
+      s: 'Para Lewis, o problema central é apenas produzir mais; para quem vai o excedente é irrelevante.',
+      e: 'Pela distribuição funcional da renda, o problema é também direcionar o excedente para quem investe produtivamente.' },
+    { id: 'le5', a: 'le', v: false,
+      s: 'Lewis defende que o Estado deve eliminar a iniciativa privada para conduzir a transformação estrutural.',
+      e: 'O Estado age quando necessário, inclusive com proteção e coordenação, mas sem eliminar a iniciativa privada.' },
+    { id: 'le6', a: 'le', v: true,
+      s: 'Expandir o setor moderno e industrializar reduz a dualidade estrutural.',
+      e: 'Ao absorver o excedente de trabalho, o setor moderno eleva a produtividade geral e reduz a distância entre os dois setores.' },
+    { id: 'le7', a: 'le', v: true,
+      s: 'Nurkse se concentra no círculo da pobreza e na formação de capital; Lewis, na dualidade estrutural e no excesso de mão de obra.',
+      e: 'É a forma mais simples de diferenciar os dois autores na prova.' },
+    { id: 'le8', a: 'le', v: false, src: 'livro',
+      s: 'Segundo o livro, em Lewis o setor atrasado é sempre o agrícola e o moderno é sempre o industrial, por definição.',
+      e: 'No livro, atrasado não é necessariamente agrícola, nem moderno necessariamente industrial. No pós-guerra, porém, isso costumava coincidir.' },
+
+    // ---------- Hirschman ----------
+    { id: 'hi1', a: 'hi', v: true,
+      s: 'Para Hirschman, o desenvolvimento real é desequilibrado, e esse desequilíbrio pode ser produtivo.',
+      e: 'Os desequilíbrios geram tensões e pressões que impulsionam novas decisões e novos investimentos.' },
+    { id: 'hi2', a: 'hi', v: false,
+      s: 'Encadeamento para frente é quando uma atividade nova cria demanda por insumos de atividades anteriores.',
+      e: 'Isso é o encadeamento para trás. Para frente é quando a atividade fornece insumos para atividades posteriores (ex.: aço → indústria automotiva, máquinas, construção).' },
+    { id: 'hi3', a: 'hi', v: true,
+      s: 'Instalar uma indústria têxtil e, com isso, aumentar a demanda por fios, máquinas e transporte é um exemplo de encadeamento para trás.',
+      e: 'A atividade nova cria demanda por insumos anteriores.' },
+    { id: 'hi4', a: 'hi', v: false,
+      s: 'Hirschman é contra o desenvolvimento, pois entende que o desequilíbrio impede o crescimento.',
+      e: 'Armadilha de prova: ele não é contra o desenvolvimento. É contra a ideia de que o desenvolvimento precise ser equilibrado desde o início.' },
+    { id: 'hi5', a: 'hi', v: true,
+      s: 'Fracassomania é a postura passiva de países subdesenvolvidos que aceitam receitas externas e não constroem soluções próprias.',
+      e: 'Em contraste, o autor valoriza a determinação: a capacidade de mobilizar recursos, energia e decisões.' },
+    { id: 'hi6', a: 'hi', v: false,
+      s: 'Para Hirschman, a falta de recursos é o único obstáculo ao desenvolvimento.',
+      e: 'O problema não é só escassez de recursos, mas também de decisões, de capacidade de canalizar recursos e de explorar os efeitos de um investimento sobre outros.' },
+    { id: 'hi7', a: 'hi', v: false,
+      s: 'O Estado, em Hirschman, deve “intervir por intervir”, aplicando receitas universais iguais para todos os países.',
+      e: 'Deve agir com inteligência estratégica, entendendo os problemas e gargalos concretos. Hirschman critica as receitas universais.' },
+    { id: 'hi8', a: 'hi', v: true,
+      s: 'Complementaridade do investimento significa que um investimento bem localizado gera outros investimentos.',
+      e: 'É o mecanismo econômico que alimenta os encadeamentos e o desenvolvimento desequilibrado.' },
+
+    // ---------- Myrdal ----------
+    { id: 'my1', a: 'my', v: true,
+      s: 'Causação circular cumulativa é o processo em que mudanças se reforçam na mesma direção: a pobreza gera mais pobreza e a riqueza gera mais riqueza.',
+      e: 'Por isso, para Myrdal, não há tendência automática ao equilíbrio.' },
+    { id: 'my2', a: 'my', v: false,
+      s: 'Myrdal afirma que o livre mercado gera, automaticamente, convergência entre países ricos e pobres.',
+      e: 'Ele critica a teoria do equilíbrio: sem políticas deliberadas, as desigualdades tendem a crescer.' },
+    { id: 'my3', a: 'my', v: true,
+      s: 'Efeitos propulsores impulsionam o desenvolvimento; efeitos regressivos o bloqueiam ou revertem.',
+      e: 'Sem políticas deliberadas, os efeitos regressivos tendem a superar os propulsores.' },
+    { id: 'my4', a: 'my', v: true,
+      s: 'Para Myrdal, fatores não econômicos, como educação, saúde, instituições e coesão social, fazem parte do processo cumulativo.',
+      e: 'Fatores econômicos e não econômicos se reforçam mutuamente.' },
+    { id: 'my5', a: 'my', v: false,
+      s: 'Para Myrdal, o subdesenvolvimento se caracteriza pela predominância de efeitos propulsores fortes.',
+      e: 'Caracteriza-se pela predominância de efeitos propulsores fracos, que não conseguem compensar os efeitos regressivos.' },
+    { id: 'my6', a: 'my', v: false,
+      s: 'Myrdal entende que o desenvolvimento depende apenas de fatores econômicos, como renda e investimento.',
+      e: 'Depende também de educação, saúde, instituições, coesão social e políticas públicas.' },
+    { id: 'my7', a: 'my', v: true,
+      s: 'Para reverter a causação cumulativa, Myrdal defende um plano nacional de desenvolvimento, com intervenção política deliberada e estudo amplo da realidade social.',
+      e: 'O Estado é central: planeja, coordena e interfere conscientemente.' },
+    { id: 'my8', a: 'my', v: false,
+      s: 'Myrdal e Hirschman enfatizam a mesma ideia: os encadeamentos e o desequilíbrio produtivo.',
+      e: 'Hirschman enfatiza encadeamentos e desequilíbrio produtivo. Myrdal enfatiza a circularidade cumulativa das desigualdades e a crítica ao equilíbrio.' }
+  ];
+
+  var byId = {};
+  Q.forEach(function (q) { byId[q.id] = q; });
+  var TOTAL = Q.length;
+  var ORIGINAL = Q.map(function (q) { return q.id; });
+
+  var state = { order: ORIGINAL.slice(), answers: {}, filter: 'all', shuffled: false };
+
+  var CHECK = '<svg aria-hidden="true" viewBox="0 0 20 20" width="18" height="18"><path d="M4 10.5l4 4 8-9" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  var CROSS = '<svg aria-hidden="true" viewBox="0 0 20 20" width="18" height="18"><path d="M5 5l10 10M15 5L5 15" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg>';
+
+  var $list = document.getElementById('list');
+  var $result = document.getElementById('result');
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function el(tag, cls, html) {
+    var n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (html != null) n.innerHTML = html;
+    return n;
+  }
+  function esc(s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+
+  function buildCard(q, n) {
+    var card = el('article', 'q');
+    card.id = 'q-' + q.id;
+    card.setAttribute('data-a', q.a);
+    card.setAttribute('data-id', q.id);
+    var meta = el('div', 'meta');
+    meta.appendChild(el('span', 'num', String(n)));
+    meta.appendChild(el('span', 'tag', esc(AUTHORS[q.a].name) + ' · Cap. ' + AUTHORS[q.a].cap));
+    if (q.src) meta.appendChild(el('span', 'src', esc(q.src)));
+    card.appendChild(meta);
+    card.appendChild(el('p', 'stmt', esc(q.s)));
+    var box = el('div', 'answers');
+    box.setAttribute('role', 'group');
+    box.setAttribute('aria-label', 'Responda: verdadeiro ou falso');
+    [['V', 'Verdadeiro'], ['F', 'Falso']].forEach(function (p) {
+      var b = el('button', 'ans', p[1]);
+      b.type = 'button';
+      b.setAttribute('data-v', p[0]);
+      b.addEventListener('click', function () { answer(q.id, p[0] === 'V'); });
+      box.appendChild(b);
+    });
+    card.appendChild(box);
+    var exp = el('div', 'exp');
+    exp.hidden = true;
+    card.appendChild(exp);
+    return card;
+  }
+
+  function applyState(card, q) {
+    var a = state.answers[q.id];
+    var btns = card.querySelectorAll('.ans');
+    var exp = card.querySelector('.exp');
+    card.classList.remove('ok', 'bad', 'answered');
+    btns.forEach(function (b) {
+      b.classList.remove('pick-ok', 'pick-bad', 'right');
+      b.disabled = false;
+      b.removeAttribute('aria-label');
+      b.innerHTML = b.getAttribute('data-v') === 'V' ? 'Verdadeiro' : 'Falso';
+    });
+    exp.hidden = true;
+    exp.innerHTML = '';
+    if (a === undefined) return;
+    var correct = (a === q.v);
+    card.classList.add('answered', correct ? 'ok' : 'bad');
+    btns.forEach(function (b) {
+      b.disabled = true;
+      var isTrueBtn = b.getAttribute('data-v') === 'V';
+      var label = isTrueBtn ? 'Verdadeiro' : 'Falso';
+      var picked = (isTrueBtn === a);
+      var isRight = (isTrueBtn === q.v);
+      if (picked && correct) {
+        b.classList.add('pick-ok');
+        b.innerHTML = CHECK + label;
+        b.setAttribute('aria-label', label + ' (sua resposta, correta)');
+      } else if (picked && !correct) {
+        b.classList.add('pick-bad');
+        b.innerHTML = CROSS + label;
+        b.setAttribute('aria-label', label + ' (sua resposta, errada)');
+      } else if (!picked && !correct && isRight) {
+        b.classList.add('right');
+        b.innerHTML = CHECK + label + ' (certa)';
+        b.setAttribute('aria-label', label + ' (resposta certa)');
+      }
+    });
+    var verdict = correct
+      ? '<span class="verdict">' + CHECK + 'Correto!</span>'
+      : '<span class="verdict">' + CROSS + 'Errado.</span>';
+    var gabarito = correct ? '' : '<strong>Essa afirmação é ' + (q.v ? 'verdadeira' : 'falsa') + '.</strong> ';
+    exp.innerHTML = verdict + gabarito + esc(q.e);
+    var nxt = el('button', 'next', 'Próxima não respondida');
+    nxt.type = 'button';
+    nxt.addEventListener('click', function () { goNext(q.id); });
+    exp.appendChild(nxt);
+    exp.hidden = false;
+  }
+
+  function visibleIds() {
+    return state.order.filter(function (id) { return state.filter === 'all' || byId[id].a === state.filter; });
+  }
+
+  function render() {
+    $list.innerHTML = '';
+    var frag = document.createDocumentFragment();
+    var ids = visibleIds();
+    var last = null;
+    ids.forEach(function (id, i) {
+      var q = byId[id];
+      if (!state.shuffled && state.filter === 'all' && q.a !== last) {
+        var h = el('h2', 'group', esc(AUTHORS[q.a].name) + '<span>Capítulo ' + AUTHORS[q.a].cap + '</span>');
+        frag.appendChild(h);
+      }
+      last = q.a;
+      var card = buildCard(q, i + 1);
+      frag.appendChild(card);
+      applyState(card, q);
+    });
+    $list.appendChild(frag);
+    updateStats();
+  }
+
+  function counts() {
+    var done = 0, ok = 0;
+    Q.forEach(function (q) {
+      var a = state.answers[q.id];
+      if (a !== undefined) { done++; if (a === q.v) ok++; }
+    });
+    return { done: done, ok: ok, bad: done - ok };
+  }
+
+  function updateStats() {
+    var c = counts();
+    document.getElementById('st-done').textContent = c.done + ' de ' + TOTAL + ' respondidas';
+    document.getElementById('st-ok').textContent = c.ok + (c.ok === 1 ? ' certa' : ' certas');
+    document.getElementById('st-bad').textContent = c.bad + (c.bad === 1 ? ' errada' : ' erradas');
+    document.getElementById('bar-ok').style.width = (c.ok / TOTAL * 100) + '%';
+    document.getElementById('bar-bad').style.width = (c.bad / TOTAL * 100) + '%';
+    var bar = document.getElementById('bar');
+    bar.setAttribute('aria-valuenow', String(c.done));
+    bar.setAttribute('aria-valuetext', c.done + ' de ' + TOTAL + ' respondidas, ' + c.ok + ' certas');
+    if (c.done === TOTAL) { showResult(c); } else { $result.hidden = true; }
+  }
+
+  function answer(id, val) {
+    if (state.answers[id] !== undefined) return;
+    state.answers[id] = val;
+    var card = document.getElementById('q-' + id);
+    if (card) applyState(card, byId[id]);
+    updateStats();
+  }
+
+  function scrollToEl(node) {
+    node.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' });
+  }
+
+  function goNext(fromId) {
+    var ids = visibleIds();
+    var start = ids.indexOf(fromId);
+    var n = ids.length;
+    for (var k = 1; k <= n; k++) {
+      var id = ids[(start + k) % n];
+      if (state.answers[id] === undefined) {
+        var card = document.getElementById('q-' + id);
+        scrollToEl(card);
+        var b = card.querySelector('.ans');
+        if (b) b.focus({ preventScroll: true });
+        return;
+      }
+    }
+    scrollToEl($result.hidden ? $list : $result);
+  }
+
+  function showResult(c) {
+    var pct = Math.round(c.ok / TOTAL * 100);
+    var msg;
+    if (c.ok >= 36) msg = 'Excelente! Você domina as teorias dos cinco autores.';
+    else if (c.ok >= 28) msg = 'Muito bom! Revise só os pontos em que errou.';
+    else if (c.ok >= 20) msg = 'Bom caminho. Volte às fichas dos autores em que errou mais.';
+    else msg = 'Vale rever o guia com calma e refazer o teste.';
+    var rows = '';
+    var worst = null;
+    Object.keys(AUTHORS).forEach(function (k) {
+      var tot = 0, ok = 0;
+      Q.forEach(function (q) {
+        if (q.a !== k) return;
+        tot++;
+        if (state.answers[q.id] === q.v) ok++;
+      });
+      if (worst === null || ok / tot < worst.r) worst = { k: k, r: ok / tot, ok: ok, tot: tot };
+      rows += '<li><span>' + esc(AUTHORS[k].name) + '</span><span class="track"><i class="fill" style="width:' + (ok / tot * 100) + '%"></i></span><span class="val">' + ok + '/' + tot + '</span></li>';
+    });
+    var tip = (c.bad > 0 && worst && worst.r < 1) ? '<p class="msg">Comece revisando: <strong>' + esc(AUTHORS[worst.k].name) + '</strong> (' + worst.ok + ' de ' + worst.tot + ' certas).</p>' : '';
+    var html = '<h2>Resultado final</h2>' +
+      '<div class="score">' + c.ok + '<small> / ' + TOTAL + ' · ' + pct + '%</small></div>' +
+      '<p class="msg">' + msg + '</p>' + tip +
+      '<ul class="byauthor">' + rows + '</ul>' +
+      '<div class="actions">' +
+      (c.bad > 0 ? '<button type="button" class="btn primary" id="r-wrong">Refazer só as erradas (' + c.bad + ')</button>' : '') +
+      '<button type="button" class="btn' + (c.bad > 0 ? '' : ' primary') + '" id="r-all">Refazer tudo</button>' +
+      '<button type="button" class="btn" id="r-shuffle">Refazer embaralhado</button>' +
+      '</div>';
+    var wasHidden = $result.hidden;
+    $result.innerHTML = html;
+    $result.hidden = false;
+    var w = document.getElementById('r-wrong');
+    if (w) w.addEventListener('click', retryWrong);
+    document.getElementById('r-all').addEventListener('click', function () { resetAll(false); });
+    document.getElementById('r-shuffle').addEventListener('click', function () { resetAll(true); });
+    if (wasHidden) setTimeout(function () { scrollToEl($result); }, 350);
+  }
+
+  function retryWrong() {
+    Q.forEach(function (q) {
+      if (state.answers[q.id] !== undefined && state.answers[q.id] !== q.v) delete state.answers[q.id];
+    });
+    state.filter = 'all';
+    syncChips();
+    render();
+    var first = state.order.filter(function (id) { return state.answers[id] === undefined; })[0];
+    if (first) goNext(first);
+  }
+
+  function shuffleArr(a) {
+    for (var i = a.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = a[i]; a[i] = a[j]; a[j] = t;
+    }
+    return a;
+  }
+
+  function resetAll(shuffle) {
+    state.answers = {};
+    state.shuffled = !!shuffle;
+    state.order = shuffle ? shuffleArr(ORIGINAL.slice()) : ORIGINAL.slice();
+    state.filter = 'all';
+    syncChips();
+    render();
+    window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+  }
+
+  function syncChips() {
+    document.querySelectorAll('.chip').forEach(function (c) {
+      c.setAttribute('aria-pressed', c.getAttribute('data-filter') === state.filter ? 'true' : 'false');
+    });
+  }
+
+  document.querySelectorAll('.chip').forEach(function (c) {
+    c.addEventListener('click', function () {
+      state.filter = c.getAttribute('data-filter');
+      syncChips();
+      render();
+    });
+  });
+  document.getElementById('btn-shuffle').addEventListener('click', function () {
+    state.shuffled = true;
+    state.order = shuffleArr(ORIGINAL.slice());
+    render();
+  });
+  document.getElementById('btn-reset').addEventListener('click', function () { resetAll(false); });
+
+  render();
+})();
+</script>
+</body>
+</html>
